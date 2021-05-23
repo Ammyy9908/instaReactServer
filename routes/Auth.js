@@ -1,11 +1,13 @@
 const router = require('express').Router();
 const verify = require('../verifyToken');
 const bcrypt = require('bcrypt')
+const cors = require('cors');
 const { check, validationResult } = require('express-validator');
 const User = require('../models/User');
 const sendMail = require('../utils/sendmail');
 const jwt = require('jsonwebtoken');
 router
+.use(cors())
 .get("/user",verify,async (req, res)=>{
    
     const {email} = req.user;
