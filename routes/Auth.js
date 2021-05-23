@@ -95,7 +95,7 @@ router
    })
 
     newUser.save().then(()=>{
-        const token = jwt.sign({email:email},process.env.TOKEN__SECRET);
+        const token = jwt.sign({email:email},'MYSECRET');
         return res.status(200).send({message:"Successfully registered!",code:1,errors,token});
         
         
@@ -122,7 +122,7 @@ router
     if(!isValid){
         return res.status(403).send({message:"Invalid username or password",errors});
     }
-    const token = jwt.sign({email:email},process.env.TOKEN__SECRET);
+    const token = jwt.sign({email:email},'MYSECRET');
     res.status(200).send({message:"Logined",code:1,token:token,errors});
 })
 .post("/verify",async (req, res) => {

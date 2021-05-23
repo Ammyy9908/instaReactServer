@@ -11,7 +11,7 @@ module.exports=function(req,res,next){
      token = token.slice(7, token.length).trimLeft();
    }
    try{
-     const verified = jwt.verify(token,process.env.TOKEN__SECRET);
+     const verified = jwt.verify(token,'MYSECRET');
      req.user = verified;
      next();
  }
