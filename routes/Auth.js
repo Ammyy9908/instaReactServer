@@ -9,6 +9,8 @@ const jwt = require('jsonwebtoken');
 router
 .use(cors())
 .get("/user",verify,async (req, res)=>{
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin',"*");
    
     const {email} = req.user;
 
@@ -21,6 +23,8 @@ router
     
 })
 .put("/sendcode",async (req, res)=>{
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin',"*");
     const email = req.body.email;
 
      // mailer function for sending mail for the confirmation code
@@ -45,7 +49,8 @@ router
 
 })
 .post('/reg',[check('email').isEmail().withMessage("Email must be a valid email address"),check('full_name').isLength({min:3,max:20}).withMessage("Make sure Your name can have minimum of 3 characters"),check('password').isLength({min:6,max:12}).withMessage("Password must be of 6 character long and maximum of 12 caharacter lon")],async (req, res) => {
-
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin',"*");
     const ipdata = req.get('https://ipinfo.io/json');
     console.log(ipdata)
     const {email,username,full_name,password} = req.body;
@@ -102,6 +107,8 @@ router
 })
 
 .post('/login',[check('email').isEmail().withMessage("Email must be a valid email address")],async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin',"*");
     const {email,password} = req.body;
     const errors = validationResult(req);
     const user = await User.findOne({email: email});
@@ -119,6 +126,8 @@ router
     res.status(200).send({message:"Logined",code:1,token:token,errors});
 })
 .post("/verify",async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin',"*");
     const email = req.body.email;
     const verifyCode = req.body.verifyCode;
 
@@ -146,7 +155,8 @@ router
     
 })
 .put("/updateActivity",async (req, res)=>{
-    
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin',"*");
     const data = req.body.data;
     const {city} = data;
     const {ip} = data;
