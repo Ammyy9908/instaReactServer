@@ -53,7 +53,7 @@ router
     res.setHeader('Access-Control-Allow-Origin',"*");
     const ipdata = req.get('https://ipinfo.io/json');
     console.log(ipdata)
-    const {email,username,full_name,password} = req.body;
+    const {email,username,full_name,password,avatar} = req.body;
     // validate the user fields
 
     const errors = validationResult(req)
@@ -85,7 +85,8 @@ router
         verifyCode:{
             time:new Date().getTime()+5*60000,
             code:code
-        }
+        },
+        avatar
     });
 
    
