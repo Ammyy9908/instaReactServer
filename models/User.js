@@ -71,6 +71,18 @@ const userSchema = new Schema({
     isVerified:{
         type:"boolean",
         default:false
+    },
+    followers:{
+        type:"Array",
+        default:[]
+    },
+    following:{
+        type:"Array",
+        default:[]
+    },
+    Online:{
+        type:"Object",
+        default:null
     }
 },
 { timestamps: true }

@@ -6,6 +6,7 @@ const { check, validationResult } = require('express-validator');
 const User = require('../models/User');
 const sendMail = require('../utils/sendmail');
 const jwt = require('jsonwebtoken');
+const {cloudinary} = require('../utils/cloudinary');
 router
 .use(cors())
 .get("/user",verify,async (req, res)=>{
@@ -15,9 +16,9 @@ router
     const {email} = req.user;
 
     const user = await User.findOne({email: email});
-    console.log(user)
+   
     if(user){
-        res.status(200).send({code:1, message:"User data",user:{user:user.username,fullName:user.full_name,email:user.email,avatar:user.avatar,birthdate:user.birthdate,last_ip:user.last_ip,bio:user.bio,website:user.website,gender:user.gender,loginActivity:user.loginActivity,accountType:user.accountType,isPrivate:user.isPrivate,allowSharing:user.allowSharing,activityStatus:user.activityStatus,isVerified:user.isVerified,phone:user.phone}})
+        res.status(200).send({code:1, message:"User data",user:{user:user.username,fullName:user.full_name,email:user.email,avatar:user.avatar,birthdate:user.birthdate,last_ip:user.last_ip,bio:user.bio,website:user.website,gender:user.gender,loginActivity:user.loginActivity,accountType:user.accountType,isPrivate:user.isPrivate,allowSharing:user.allowSharing,activityStatus:user.activityStatus,isVerified:user.isVerified,phone:user.phone,id:user._id}})
     }
     
     
@@ -161,10 +162,8 @@ router
     const data = req.body.data;
     const {city} = data;
     const {ip} = data;
-    const browser = req.body.browser;
+    // const browser = req.body.browser;
     const email = req.body.email;
-
-    console.log(req.body)
 
     const user = await User.findOne({email:email});
 
@@ -178,6 +177,55 @@ router
 
 
 
+})
+.put("/add/phone",async (req, res)=>{
+    const {phone,uid} = req.body;
+
+    const isUpdated = await User.updateOne({_id:uid},{phone:phone});
+
+    if(!isUpdated){
+            return res.status(403).send({message:"Error while Adding Phone",code:0});    
+    }
+    res.status(200).send({message:"Phone Added",code:1});
+})
+.put("/add/avatar",async (req, res)=>{
+   
+   const {img,id} = req.body;
+   console.log(req.body)
+
+   
+  
+
+   cloudinary.uploader.upload(file=img, { 
+    upload_preset:'avatars'
+    }).then((response) => {
+        console.log(response);
+        const {url} = response;
+
+        User.updateOne({_id: id},{avatar:url}).then(async ()=>{
+            const user = await User.findOne({_id: id});
+            console.log(user)
+            res.status(200).send({code:1, message:"User data",user:{user:user.username,fullName:user.full_name,email:user.email,avatar:user.avatar,birthdate:user.birthdate,last_ip:user.last_ip,bio:user.bio,website:user.website,gender:user.gender,loginActivity:user.loginActivity,accountType:user.accountType,isPrivate:user.isPrivate,allowSharing:user.allowSharing,activityStatus:user.activityStatus,isVerified:user.isVerified,phone:user.phone,id:user._id}})
+        }).catch((err) => {
+            console.log(err);
+        })
+        
+        
+    }).catch((err) => {
+        console.log(err);
+    })
+    
+
+
+   
+})
+.put("/update/:id",async (req,res)=>{
+    const {id} = req.params;
+    const {name,uname,website,bio} = req.body;
+    User.updateOne({_id:id}, {full_name:name,user:uname,website,bio}).then(async ()=>{
+       const user = await User.findOne({_id:id});
+       res.status(200).send({code:1, message:"User data",user:{user:user.username,fullName:user.full_name,email:user.email,avatar:user.avatar,birthdate:user.birthdate,last_ip:user.last_ip,bio:user.bio,website:user.website,gender:user.gender,loginActivity:user.loginActivity,accountType:user.accountType,isPrivate:user.isPrivate,allowSharing:user.allowSharing,activityStatus:user.activityStatus,isVerified:user.isVerified,phone:user.phone,id:user._id}})
+    }).catch(err =>console.log(err));
 })
 
 module.exports = router;
