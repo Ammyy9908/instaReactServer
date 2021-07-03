@@ -168,7 +168,7 @@ router
     const user = await User.findOne({email:email});
 
     if(user){
-        const updatedUser = await User.updateOne({email:email,loginActivity:[...user.loginActivity,{ip:ip,city}],last_ip:ip})
+        const updatedUser = await User.updateOne({email:email},{email:email,loginActivity:[...user.loginActivity,{ip:ip,city}],last_ip:ip})
        if(updatedUser){
             res.status(200).send({message:"Activity updated successfully",code:1,user});
         }

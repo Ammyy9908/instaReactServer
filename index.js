@@ -1,10 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const authRoute = require('./routes/Auth');
+const postRoute = require('./routes/Photos')
 const mongoose = require('mongoose');
 const http = require("http");
 const socketIo = require("socket.io");
-const User = require('./models/User');
+
 
 const app = express();
 app.use(cors());
@@ -21,40 +22,20 @@ app.get("/", (req, res) => {
     res.send("API Working");
 })
 app.use("/auth",authRoute);
+app.use("/post",postRoute);
 
 const server = http.createServer(app);
 
 const io = socketIo(server);
+app.set('socketio', io);
 
-
-
-io.on("connection",(socket)=>{
-    console.log("connection established!");
-
-    
-
-   socket.on("user",async (user)=>{
-       
-
-       const {email,time} = await user;
-       console.log("Incoming data",email,time);
-       const client = await User.findOne({email: email});
-       console.log(client);
-
-       if(client){
-           const updateduser = await User.updateOne({email:email},{Online:{status:true,timestamp:time}});
-           if(updateduser){
-               console.log("User Status Updated");
-           }
-       }
-
-   })
-
-    socket.on("disconnect",(data)=>{
-        console.log(data);
-        console.log("connection closed")
+io.on("connection",(socket) =>{
+    console.log("Client connected");
+    socket.on("disconnect",()=>{
+        console.log("Client disconnected")
     })
 })
+
 
 
 
