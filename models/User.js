@@ -9,6 +9,14 @@ const userSchema = new Schema({
         type:Date,
         default:null,
     },
+    saved_posts:{
+        type:"array",
+        default:[],
+    },
+    tagged_posts:{
+        type:"array",
+        default:[]
+    },
     full_name:{
         type: 'string',
         required: true
