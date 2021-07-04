@@ -23,6 +23,12 @@ router
     
     
 })
+.get("/user/:uid",verify,async (req, res)=>{
+    const {uid} = req.params;
+
+    const user = await User.findOne({username: uid});
+    return res.status(200).send({message:"requested user",user:user})
+})
 .put("/sendcode",async (req, res)=>{
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin',"*");

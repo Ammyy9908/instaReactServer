@@ -9,17 +9,21 @@ const photoSchema = new Schema({
         type: 'string',
         required:false
     },
-    lattitude:{
-        type: 'string',
-        required:true
-    },
-    longitude:{
+    location:{
         type: 'string',
         required:true
     },
     image:{
         type: 'object',
         required:true
+    },
+    commentOff:{
+        type: 'boolean',
+        default:false
+    },
+    altText:{
+        type: 'string',
+       
     },
     uploadAt:{
         type: 'string',

@@ -23,7 +23,7 @@ router
 })
 .post("/add",async (req, res)=>{
    var io = req.app.get('socketio');
-   const {image,caption,lattitude,longitude,user,uploadAt} = req.body;
+   const {image,caption,location,user,uploadAt,commentOff,altText} = req.body;
    console.log(uploadAt,user);
    cloudinary.uploader.upload(file=image, { 
     upload_preset:'posts'
@@ -34,14 +34,15 @@ router
      const {url,public_id} = response;
      const newPhoto = new Photo({
         caption:caption,
-        lattitude,
-        longitude,
+        location,
         image:{
            url,
            public_id
         },
         upload_by:user,
-        uploadAt:uploadAt
+        uploadAt:uploadAt,
+        commentOff,
+        altText,
      })
 
      newPhoto.save().then((post)=>{
