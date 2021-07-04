@@ -18,7 +18,7 @@ router
     const user = await User.findOne({email: email});
    
     if(user){
-        res.status(200).send({code:1, message:"User data",user:{user:user.username,fullName:user.full_name,email:user.email,avatar:user.avatar,birthdate:user.birthdate,last_ip:user.last_ip,bio:user.bio,website:user.website,gender:user.gender,loginActivity:user.loginActivity,accountType:user.accountType,isPrivate:user.isPrivate,allowSharing:user.allowSharing,activityStatus:user.activityStatus,isVerified:user.isVerified,phone:user.phone,id:user._id}})
+        res.status(200).send({code:1, message:"User data",user:{user:user.username,fullName:user.full_name,email:user.email,avatar:user.avatar,birthdate:user.birthdate,last_ip:user.last_ip,bio:user.bio,website:user.website,gender:user.gender,loginActivity:user.loginActivity,accountType:user.accountType,isPrivate:user.isPrivate,allowSharing:user.allowSharing,activityStatus:user.activityStatus,isVerified:user.isVerified,phone:user.phone,id:user._id,saved_posts:user.saved_posts,tagged_posts:user.tagged_posts}})
     }
     
     
@@ -226,6 +226,15 @@ router
        const user = await User.findOne({_id:id});
        res.status(200).send({code:1, message:"User data",user:{user:user.username,fullName:user.full_name,email:user.email,avatar:user.avatar,birthdate:user.birthdate,last_ip:user.last_ip,bio:user.bio,website:user.website,gender:user.gender,loginActivity:user.loginActivity,accountType:user.accountType,isPrivate:user.isPrivate,allowSharing:user.allowSharing,activityStatus:user.activityStatus,isVerified:user.isVerified,phone:user.phone,id:user._id}})
     }).catch(err =>console.log(err));
+})
+.put("/save/:userid",async (req, res) =>{
+    const {postid} = req.body;
+
+
+    const user = await User.findOne({_id:req.params.userid});
+    User.updateOne({_id:req.params.userid},{saved_posts:[...user.saved_posts,postid]}).then(()=>{
+        return res.status(200).send({message:"Saved successfully!",error:0})
+    })
 })
 
 module.exports = router;

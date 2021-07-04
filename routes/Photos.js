@@ -19,7 +19,7 @@ router
    const {id} = req.params;
    console.log("Requested post id:",id);
    const post = await Photo.findOne({_id:id});
-   return res.status(200).send({post:post});
+   return res.status(200).send({post:post});r
 })
 .post("/add",async (req, res)=>{
    var io = req.app.get('socketio');
