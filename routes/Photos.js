@@ -10,7 +10,7 @@ const {cloudinary} = require('../utils/cloudinary');
 router
 .use(cors())
 .get("/all",async (req, res)=>{
- const posts = await Photo.find({},{image:1,caption:1,comments:1,likes:1,upload_by:1});
+ const posts = await Photo.find({},{image:1,caption:1,comments:1,likes:1,upload_by:1,uploadAt:1});
    return res.status(200).send({posts})
  
  
