@@ -36,8 +36,8 @@ app.set('socketio', io);
 io.on("connection",(socket) =>{
    
     socket.on("disconnect",()=>{
-        // console.log("Client disconnected")
-        continue;
+        console.log("Client disconnected")
+       
     })
 })
 
