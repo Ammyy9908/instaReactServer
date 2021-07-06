@@ -5,6 +5,16 @@ const commentScheama = new Schema({
        type: 'string',
        required:true
    }
+   ,photo_id:{
+       type: 'string',
+       required:true
+   },
+   comment_by:{
+       type:"object",
+   },
+   timestamp:{
+       type:"string",
+   }
 },
 { timestamps: true }
 )

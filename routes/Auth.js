@@ -9,6 +9,13 @@ const jwt = require('jsonwebtoken');
 const {cloudinary} = require('../utils/cloudinary');
 router
 .use(cors())
+.get('/avatar/:id',async (req, res) => {
+    const {id} = req.params;
+
+    const user = await User.findOne({_id:id});
+    const {avatar} = user;
+    return res.status(200).redirect(avatar)
+})
 .get("/user",verify,async (req, res)=>{
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin',"*");
@@ -46,7 +53,7 @@ router
 
             if(user){
                 sendMail(email,code).then((result)=>{
-                    console.log(result);
+                   
                     return res.status(200).send({message:"Verification Sented to email",code:1});
                 })
             }
@@ -59,7 +66,7 @@ router
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin',"*");
     const ipdata = req.get('https://ipinfo.io/json');
-    console.log(ipdata)
+    
     const {email,username,full_name,password,avatar} = req.body;
     // validate the user fields
 
@@ -99,7 +106,7 @@ router
    
 
    sendMail(email,code).then((data)=>{
-       console.log(data);
+      res.status(200).send("Email sented")
    })
 
     newUser.save().then(()=>{
@@ -108,7 +115,7 @@ router
         
         
     }).catch(err=>{
-        console.log(err)
+     
         return res.status(500).send({message:err.message});
     })
     
@@ -197,7 +204,7 @@ router
 .put("/add/avatar",async (req, res)=>{
    
    const {img,id} = req.body;
-   console.log(req.body)
+
 
    
   
@@ -205,20 +212,20 @@ router
    cloudinary.uploader.upload(file=img, { 
     upload_preset:'avatars'
     }).then((response) => {
-        console.log(response);
+      
         const {url} = response;
 
         User.updateOne({_id: id},{avatar:url}).then(async ()=>{
             const user = await User.findOne({_id: id});
-            console.log(user)
+        
             res.status(200).send({code:1, message:"User data",user:{user:user.username,fullName:user.full_name,email:user.email,avatar:user.avatar,birthdate:user.birthdate,last_ip:user.last_ip,bio:user.bio,website:user.website,gender:user.gender,loginActivity:user.loginActivity,accountType:user.accountType,isPrivate:user.isPrivate,allowSharing:user.allowSharing,activityStatus:user.activityStatus,isVerified:user.isVerified,phone:user.phone,id:user._id}})
         }).catch((err) => {
-            console.log(err);
+          return res.status(500).send(err.message)
         })
         
         
     }).catch((err) => {
-        console.log(err);
+        return res.status(500).send(err.message)
     })
     
 
@@ -231,7 +238,7 @@ router
     User.updateOne({_id:id}, {full_name:name,user:uname,website,bio}).then(async ()=>{
        const user = await User.findOne({_id:id});
        res.status(200).send({code:1, message:"User data",user:{user:user.username,fullName:user.full_name,email:user.email,avatar:user.avatar,birthdate:user.birthdate,last_ip:user.last_ip,bio:user.bio,website:user.website,gender:user.gender,loginActivity:user.loginActivity,accountType:user.accountType,isPrivate:user.isPrivate,allowSharing:user.allowSharing,activityStatus:user.activityStatus,isVerified:user.isVerified,phone:user.phone,id:user._id}})
-    }).catch(err =>console.log(err));
+    }).catch(err =>  res.status(500).send(err.message));
 })
 .put("/save/:userid",async (req, res) =>{
     const {postid} = req.body;
