@@ -16,7 +16,7 @@ app.use(express.json({limit:'50mb'}))
 // connect to database
 //local//mongodb://127.0.0.1:27017
 //host:mongodb+srv://admin-summit:2146255sb8@cluster0.fyuq8.mongodb.net
-mongoose.connect(`mongodb+srv://admin-summit:2146255sb8@cluster0.fyuq8.mongodb.net/InstagramDB`,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{
+mongoose.connect(`mongodb+srv://admin-summit:2146255sb8@cluster0.fyuq8.mongodb.net/NewInstaUsers`,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{
     console.log('Database connected');
 }).catch(err =>console.log(err));
 
